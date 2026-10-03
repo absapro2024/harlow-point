@@ -110,7 +110,7 @@ Sky.SkyShader = {
 			vWorldPosition = worldPosition.xyz;
 
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-			gl_Position.z = gl_Position.w; // set z to camera.far
+			gl_Position.z = gl_Position.w * 0.99995; // just inside camera.far (avoids clipping wedges)
 
 			vSunDirection = normalize( sunPosition );
 

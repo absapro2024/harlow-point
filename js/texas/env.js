@@ -60,7 +60,7 @@ export function nwsToState(text = '') {
   return 'clear';
 }
 
-const CLOUD_VS = `varying vec3 vDir; void main(){ vDir = normalize((modelMatrix*vec4(position,1.)).xyz - cameraPosition); gl_Position = projectionMatrix*viewMatrix*modelMatrix*vec4(position,1.); gl_Position.z = gl_Position.w; }`;
+const CLOUD_VS = `varying vec3 vDir; void main(){ vDir = normalize((modelMatrix*vec4(position,1.)).xyz - cameraPosition); gl_Position = projectionMatrix*viewMatrix*modelMatrix*vec4(position,1.); gl_Position.z = gl_Position.w * 0.9999; }`;
 const CLOUD_FS = `
 precision highp float; varying vec3 vDir; uniform float uTime, uCover, uDark; uniform vec3 uSun, uSunCol; uniform vec2 uWind;
 float h(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
@@ -78,7 +78,7 @@ void main(){
   vec2 sOff = normalize(uSun.xz + 1e-4) * 0.18;
   float cs = fbm((uv + sOff)*0.55)*0.8 + fbm((uv+sOff)*2.3+3.1)*0.28;
   float shade = clamp(1.0 - (smoothstep(th, th+0.3, cs))*0.65, 0.25, 1.0);
-  float day = clamp(uSun.y*4.0 + 0.25, 0.04, 1.0);
+  float day = clamp(uSun.y*4.0 + 0.25, 0.012, 1.0);
   vec3 lit = mix(vec3(0.42,0.45,0.5), uSunCol, shade) * day;
   lit = mix(lit, vec3(0.28,0.30,0.33)*day, uDark);
   float silver = pow(max(dot(d, uSun), 0.0), 12.0) * (1.0-dens) * 0.8;
@@ -96,7 +96,7 @@ export class Environment {
     this.tempF = 72; this.windDir = 160; this.nextWx = 1800; this.wet = 0; this.flash = 0; this.boltTimer = 8;
     this.live = null; this.time = 0;
 
-    this.sky = new Sky(); this.sky.scale.setScalar(45000); scene.add(this.sky);
+    this.sky = new Sky(); this.sky.geometry.dispose(); this.sky.geometry = new THREE.SphereGeometry(1, 48, 24); this.sky.scale.setScalar(30000); scene.add(this.sky);
     const u = this.sky.material.uniforms; u.turbidity.value = 6; u.rayleigh.value = 1.6; u.mieCoefficient.value = 0.004; u.mieDirectionalG.value = 0.82;
 
     this.cloudMat = new THREE.ShaderMaterial({ vertexShader: CLOUD_VS, fragmentShader: CLOUD_FS, transparent: true, depthWrite: false, side: THREE.BackSide, fog: false,
@@ -176,8 +176,8 @@ export class Environment {
     const occl = 1 - this.cur.cover * 0.85 - this.cur.rain * 0.1;
     this.sun.color.copy(sunCol); this.sun.intensity = Math.max(0, 3.2 * dayAmt * Math.max(0.05, occl));
     this.sun.position.copy(playerPos).addScaledVector(sunV.y > 0 ? sunV : new THREE.Vector3(0, 1, 0), 600); this.sun.target.position.copy(playerPos);
-    this.moon.intensity = (1 - dayAmt) * 0.12 * (1 - this.cur.cover * .7); this.moon.position.set(playerPos.x - 300, playerPos.y + 500, playerPos.z + 200);
-    this.hemi.intensity = 0.05 + dayAmt * (0.45 - this.cur.dark * 0.2);
+    this.moon.intensity = (1 - dayAmt) * 0.35 * (1 - this.cur.cover * .7); this.moon.position.set(playerPos.x - 300, playerPos.y + 500, playerPos.z + 200);
+    this.hemi.intensity = 0.14 * (1 - dayAmt) + dayAmt * (0.45 - this.cur.dark * 0.2);
     this.hemi.color.setRGB(0.75 - this.cur.dark * .25, 0.82 - this.cur.dark * .25, 0.92 - this.cur.dark * .2);
 
     // fog color follows sky brightness

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Harlow Point">
+<meta name="theme-color" content="#0d1b26">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Harlow Point: Shift Work</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<!-- iOS-only gate -->
+<div id="gate" class="screen hidden">
+  <div class="card">
+    <h1>Harlow Point: Shift Work</h1>
+    <p>This game is built for <b>iPhone and iPad</b> only.</p>
+    <p class="dim">Open this page in Safari on your iPhone, tap Share, then tap <b>Add to Home Screen</b> to install it as an app.</p>
+  </div>
+</div>
+
+<!-- Title / chargen / panels are rendered into #overlay -->
+<div id="overlay"></div>
+
+<!-- HUD -->
+<div id="hud" class="hidden">
+  <div id="topbar">
+    <div id="clockbox"><div id="clock">--:--</div><div id="shift" class="dim"></div></div>
+    <div id="objective"></div>
+    <div id="needs">
+      <div class="need" data-k="energy"><span>⚡</span><i></i></div>
+      <div class="need" data-k="hydration"><span>💧</span><i></i></div>
+      <div class="need" data-k="nutrition"><span>🍽</span><i></i></div>
+      <div class="need" data-k="stress"><span>😣</span><i></i></div>
+      <div id="focus" class="dim"></div>
+    </div>
+  </div>
+  <div id="buttons">
+    <button id="btnMenu">☰</button><button id="btnWO">WO</button><button id="btnRadio" class="hidden">📻</button><button id="btnHelp">?</button>
+  </div>
+  <div id="badgechip"></div>
+  <div id="arrow"><div id="arrowIcon">▲</div><div id="arrowDist"></div></div>
+  <div id="hint" class="hidden"></div>
+  <div id="prompt" class="hidden"><span id="promptIcon"></span><span id="promptText"></span><span id="promptCat"></span></div>
+  <div id="subs"></div>
+  <div id="toasts"></div>
+  <div id="banner" class="hidden"><b></b><span></span></div>
+  <div id="stick"><div id="knob"></div></div>
+  <button id="btnUse" class="hidden">✋</button>
+  <button id="btnRun">RUN</button>
+  <div id="vignette"></div>
+  <div id="crosshair"></div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

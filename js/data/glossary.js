@@ -1,0 +1,16 @@
+export const GLOSSARY = [
+  ['ALARA-style practice', 'A general idea of keeping exposure as low as reasonably achievable. In this game it is represented by fictional dose units.'],
+  ['Assembly area', 'A designated place where staff gather during drills so they can be counted.'],
+  ['Clearance tier', 'Your fictional access level (0–5). Higher tiers open more areas, along with the right training.'],
+  ['Escort', 'An authorized employee who accompanies someone without access.'],
+  ['GET', 'General Employee Training: the baseline safety course required for all staff.'],
+  ['Handover', 'Passing on status, open work, and concerns to the next shift.'],
+  ['LOTO-style tagging', 'A fictional version of lockout/tagout: equipment is isolated and tagged so nobody operates it during work.'],
+  ['PPE', 'Personal protective equipment such as a hard hat, safety glasses, gloves, and hearing protection.'],
+  ['Protected Area', 'A fictional high-security zone that requires extra processing and Tier 3+.'],
+  ['Questioning attitude', 'Challenging assumptions and stopping when something does not seem right.'],
+  ['STAR', 'Stop, Think, Act, Review: a self-checking tool.'],
+  ['Tailgating', 'Following someone through a badge door without badging yourself. It is prohibited.'],
+  ['Three-way communication', 'Send, repeat back, and confirm.'],
+  ['Work order (WO)', 'An authorized task with steps, prerequisites, and documentation.'],
+];

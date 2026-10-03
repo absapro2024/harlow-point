@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Harlow Point — Open World: Bosque County, Texas</title>
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#eef3f7;touch-action:none;-webkit-user-select:none;user-select:none}
+  canvas{display:block}
+  .hud{position:fixed;background:rgba(10,16,22,.62);backdrop-filter:blur(6px);border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.35;pointer-events:none}
+  #info{top:10px;left:10px;min-width:200px}
+  #info b{font-size:20px}
+  #place{top:10px;left:50%;transform:translateX(-50%);text-align:center}
+  #compass{top:10px;right:10px;width:220px;height:26px;overflow:hidden;padding:4px 0;text-align:center}
+  #cstrip{white-space:nowrap;font-weight:600;letter-spacing:.5px;position:relative}
+  #help{bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.85;text-align:center}
+  #toast{top:70px;left:50%;transform:translateX(-50%);display:none;font-size:14px}
+  #loading{position:fixed;inset:0;background:#0b1620;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:30;font-size:15px}
+  #bar{width:280px;height:6px;background:#22313d;border-radius:3px;margin-top:12px;overflow:hidden}#bar i{display:block;height:100%;width:0;background:#5fb3e8}
+  #map{position:fixed;inset:5%;background:#0b1620ee;border-radius:12px;display:none;z-index:20;padding:12px;box-sizing:border-box}
+  #map canvas{width:100%;height:calc(100% - 40px);object-fit:contain;cursor:crosshair}
+  #map .t{display:flex;justify-content:space-between;align-items:center;height:32px}
+  button{font:inherit;color:#eef3f7;background:#26394a;border:0;border-radius:8px;padding:6px 12px}
+  .tb{position:fixed;pointer-events:auto;background:rgba(10,16,22,.6);border-radius:50%;width:58px;height:58px;font-weight:700;font-size:12px;z-index:5}
+  #stick{position:fixed;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25);left:30px;bottom:30px;display:none;z-index:5;pointer-events:none}
+  #knob{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.35)}
+  body.touch #stick{display:block} body:not(.touch) .tb{display:none}
+</style>
+</head>
+<body>
+<div id="loading"><div id="lt">Loading Bosque County terrain (USGS elevation)…</div><div id="bar"><i></i></div></div>
+<div id="info" class="hud"></div>
+<div id="place" class="hud"></div>
+<div id="compass" class="hud"><div id="cstrip"></div></div>
+<div id="toast" class="hud"></div>
+<div id="help" class="hud"></div>
+<div id="stick"><div id="knob"></div></div>
+<button class="tb" id="bRun" style="right:24px;bottom:110px">RUN</button>
+<button class="tb" id="bDrive" style="right:96px;bottom:40px">DRIVE</button>
+<button class="tb" id="bMap" style="right:24px;bottom:40px">MAP</button>
+<button class="tb" id="bTime" style="right:168px;bottom:40px">TIME</button>
+<div id="map"><div class="t"><b>Map — click/tap to travel there</b><span><button id="wxBtn">Weather</button> <button id="mapClose">Close</button></span></div><canvas id="mapc" width="1026" height="1026"></canvas></div>
+<script>
+window.addEventListener('error',function(e){var l=document.getElementById('lt');if(l)l.textContent='Could not start: '+e.message+' — try Ctrl+Shift+R, or turn on hardware acceleration.';});
+</script>
+<script type="module" src="js/texas/world.js"></script>
+</body>
+</html>

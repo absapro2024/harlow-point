@@ -58,6 +58,13 @@
   <div id="vignette"></div>
   <div id="crosshair"></div>
 </div>
+<script>
+// Visible error screen instead of a blank page (e.g. WebGL disabled, old cached files).
+function hpFail(msg){var g=document.getElementById('gate');if(!g)return;g.classList.remove('hidden');g.querySelector('.card').innerHTML='<h1>Harlow Point could not start</h1><p>'+msg+'</p><p class="dim">Fixes: 1) Press Ctrl+Shift+R to reload. 2) Opera GX: Settings, search "hardware acceleration", turn it ON, restart the browser. 3) Turn off the GX Control CPU/RAM limiter. 4) Try Chrome or Edge.</p>';}
+window.addEventListener('error',function(e){hpFail(String(e.message||e));});
+window.addEventListener('unhandledrejection',function(e){hpFail(String(e.reason&&e.reason.message||e.reason));});
+setTimeout(function(){if(!document.querySelector('#overlay .screen')&&!document.getElementById('hud').offsetParent&&document.getElementById('gate').classList.contains('hidden'))hpFail('The game took too long to load. Your browser may be blocking JavaScript modules or WebGL.');},8000);
+</script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

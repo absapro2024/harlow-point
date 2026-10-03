@@ -36,7 +36,9 @@ if ('serviceWorker' in navigator && !DEV && !NATIVE) navigator.serviceWorker.reg
 
 // ------------------------------------------------------------------ renderer / scene
 const canvas = document.getElementById('view');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' }); }
+catch (e) { window.hpFail?.('3D graphics (WebGL) are turned off or unavailable in this browser.'); throw e; }
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(70, 1, 0.05, 160);

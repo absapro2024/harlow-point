@@ -29,7 +29,8 @@ import { POLICY } from './data/training.js';
 const params = new URLSearchParams(location.search);
 const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const DEV = params.has('dev');
-if (!isIOS && !DEV && !NATIVE) { document.getElementById('gate').classList.remove('hidden'); throw new Error('iOS only'); }
+const DESKTOP = !('ontouchstart' in window) && navigator.maxTouchPoints === 0;
+if (DESKTOP) document.body.classList.add('desktop');
 const NATIVE = !!window.Capacitor?.isNativePlatform?.();
 if ('serviceWorker' in navigator && !DEV && !NATIVE) navigator.serviceWorker.register('sw.js').catch(() => {});
 
@@ -71,7 +72,7 @@ G.missions = new Missions(G);
 G.director = new Director(G);
 G.ai = new AIManager(G);
 const controls = new Controls(canvas);
-G.setPaused = (p) => { G.paused = p; controls.enabled = !p; if (p) { controls.reset(); G.ui.prompt(null); document.getElementById('hint').classList.add('hidden'); } };
+G.setPaused = (p) => { G.paused = p; controls.enabled = !p; if (p) { if (document.pointerLockElement) document.exitPointerLock(); controls.reset(); G.ui.prompt(null); document.getElementById('hint').classList.add('hidden'); } };
 G.escorted = () => G.npcs.some(n => n.goal?.kind === 'escort' && Math.hypot(n.x - G.player.x, n.z - G.player.z) < 4);
 G.applySettings = () => { document.body.classList.toggle('cb', settings.colorBlind); document.body.classList.toggle('lefty', settings.leftHanded); G.clock.scale = 0.25 * settings.timeScale;
   for (const n of G.npcs) { const l = n._labelText; n._labelText = ''; n.setLabel(settings.showAIThoughts ? l : n.name); } };
@@ -170,7 +171,12 @@ function findTarget() {
 let target = null;
 document.getElementById('btnUse').addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); doInteract(); }, { passive: false });
 document.getElementById('btnUse').addEventListener('click', () => doInteract());
-addEventListener('keydown', e => { if (e.code === 'KeyE' && !G.paused) doInteract(); if (e.code === 'Escape') G.ui.modal ? G.ui.close() : openMenu(G); });
+addEventListener('keydown', e => {
+  if (e.code === 'KeyE' && !G.paused) doInteract();
+  if (e.code === 'Escape' && G.started) G.ui.modal ? G.ui.close() : openMenu(G);
+  if (!G.started || G.ui.modal) return;
+  if (e.code === 'KeyQ') openWO(G, false); if (e.code === 'KeyM') openMenu(G); if (e.code === 'KeyH') openTerminal(G, 'help'); if (e.code === 'KeyR' && G.player.hasRadio) openRadio();
+});
 const tap = (id, fn) => { const b = document.getElementById(id); b.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false }); b.addEventListener('click', fn); };
 tap('btnRun', () => { G.sprintToggle = !G.sprintToggle; if (G.sprintToggle && !roomAt(G.player.x, G.player.z).outdoor) G.ui.hint('run', 'Running indoors is discouraged. Coworkers notice and may remind you to walk.'); });
 tap('btnMenu', () => openMenu(G)); tap('btnWO', () => openWO(G, false)); tap('btnHelp', () => openTerminal(G, 'help'));
@@ -284,7 +290,7 @@ function startPlay() { document.getElementById('hud').classList.remove('hidden')
 titleScreen(() => { audio.unlock(); characterCreation(profile => {
   G.player.profile = profile; startPlay();
   G.ui.banner('Monday, 06:40', 'Cedar Ridge Training Center • Harlow Point Generating Station (fictional)', 5500);
-  setTimeout(() => G.ui.hint('move', 'Drag the left side to walk and the right side to look. Head inside to the Security desk.'), 1200);
+  setTimeout(() => G.ui.hint('move', DESKTOP ? 'Click the game to look with the mouse. W A S D to walk, E to interact, hold Shift to run, Q work orders, Esc menu. Head inside to the Security desk.' : 'Drag the left side to walk and the right side to look. Head inside to the Security desk.'), 1200);
   G.autosave();
 }); }, () => { audio.unlock(); G.loadGame(); });
 
@@ -296,7 +302,7 @@ function loop(t) {
   if (!G.paused && G.started) {
     G.time += dt;
     const gm = dt * G.clock.scale; G.clock.tick(dt);
-    G.player.update(dt, controls.read(), world, G.npcs, G.sprintToggle);
+    G.player.update(dt, controls.read(), world, G.npcs, G.sprintToggle || !!controls.keys.ShiftLeft || !!controls.keys.ShiftRight);
     G.player.needs.update(gm, { sprinting: G.player.sprinting, warm: false });
     G.ai.update(dt, gm);
     G.director.update(gm, dt);

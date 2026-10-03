@@ -27,6 +27,7 @@ export class UI {
     if (!t || this.modal || this.G.paused) { p.classList.add('hidden'); u.classList.add('hidden'); return; }
     $('promptIcon').textContent = ICON[t.cat] || '•'; $('promptText').textContent = t.label; const c = $('promptCat'); c.textContent = CAT[t.cat]; c.className = t.cat;
     p.classList.remove('hidden'); u.classList.remove('hidden');
+    if (!document.pointerLockElement && document.body.classList.contains('desktop')) {} 
   }
   update(G) {
     const n = G.player.needs;

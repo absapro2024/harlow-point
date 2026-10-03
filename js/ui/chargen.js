@@ -8,7 +8,7 @@ function screen(html) { ov().innerHTML = `<div class="screen"><div class="card">
 export function titleScreen(onNew, onContinue) {
   const c = screen(`<h1>Harlow Point: Shift Work</h1><p class="dim">A first-person career simulation at a fictional civilian nuclear generating station.</p>
     <p class="placeholder-tag">Chapter 1: Cedar Ridge Training Center</p>
-    <div class="opts"><button class="primary" id="new">New career</button><button id="cont" ${hasSave(1) ? '' : 'disabled'}>Continue</button></div>
+    <p class="dim" style="font-size:13px">Computer controls: click to look with the mouse • W A S D move • E interact • Shift run • Q work orders • Esc menu</p><div class="opts"><button class="primary" id="new">New career</button><button id="cont" ${hasSave(1) ? '' : 'disabled'}>Continue</button></div>
     <p class="dim" style="font-size:12px">All stations, people, equipment, and procedures are fictional and simplified for gameplay. Nothing here is real operating guidance.</p>`);
   c.querySelector('#new').onclick = onNew; c.querySelector('#cont').onclick = onContinue;
 }

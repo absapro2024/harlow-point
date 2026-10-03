@@ -82,3 +82,8 @@ body.lefty #btnUse { right: auto; left: calc(28px + var(--sal)); } body.lefty #b
 body.cb .gauge { background: linear-gradient(90deg, #8a4a0a 0 30%, #6a5a3a 30% 42%, #1f4f9a 42% 58%, #6a5a3a 58% 70%, #8a4a0a 70%); }
 .needle { position: absolute; top: -4px; bottom: -4px; width: 4px; background: #fff; border-radius: 2px; }
 @media (orientation: portrait) { #needs { grid-template-columns: repeat(2, 56px); } #objective { max-width: 40vw; font-size: 12px; } }
+
+/* desktop: keyboard + mouse, hide touch controls */
+body.desktop #stick, body.desktop #btnUse, body.desktop #btnRun { display: none !important; }
+body.desktop #prompt::after { content: 'Press E'; font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--acc); color: #06131d; font-weight: 700; }
+body.desktop #crosshair::after { content: ''; }

@@ -1,5 +1,5 @@
 // Offline cache (cache-first, then network). Bump VERSION to refresh after updates.
-const VERSION = 'hp-m1-v2';
+const VERSION = 'hp-m1-v3';
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', e => {
